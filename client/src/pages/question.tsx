@@ -12,7 +12,7 @@ import Sidebar from "@/components/layout/sidebar";
 import RightSidebar from "@/components/layout/right-sidebar";
 import VoteButtons from "@/components/vote-buttons";
 import { useAuth } from "@/components/auth-context";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useScreenSize } from "@/hooks/use-mobile";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
@@ -29,6 +29,7 @@ export default function QuestionPage() {
   const { id } = useParams();
   const { isAuthenticated, user } = useAuth();
   const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -154,8 +155,8 @@ export default function QuestionPage() {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-6`}>
-          {!isMobile && <Sidebar />}
+        <div className={`flex ${screenSize === 'mobile' ? 'flex-col' : 'flex-row'} gap-6`}>
+          {screenSize === 'desktop' && <Sidebar />}
           
           <main className="flex-1 max-w-4xl">
             {/* Question */}
@@ -352,7 +353,7 @@ export default function QuestionPage() {
             )}
           </main>
 
-          {!isMobile && <RightSidebar />}
+          {screenSize === 'desktop' && <RightSidebar />}
         </div>
       </div>
     </div>

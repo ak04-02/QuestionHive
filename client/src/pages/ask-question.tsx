@@ -9,7 +9,7 @@ import Header from "@/components/layout/header";
 import Sidebar from "@/components/layout/sidebar";
 import RightSidebar from "@/components/layout/right-sidebar";
 import { useAuth } from "@/components/auth-context";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useScreenSize } from "@/hooks/use-mobile";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
@@ -28,6 +28,7 @@ const questionFormSchema = insertQuestionSchema.extend({
 export default function AskQuestion() {
   const { isAuthenticated, user } = useAuth();
   const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -93,8 +94,8 @@ export default function AskQuestion() {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-6`}>
-          {!isMobile && <Sidebar />}
+        <div className={`flex ${screenSize === 'mobile' ? 'flex-col' : 'flex-row'} gap-6`}>
+          {screenSize === 'desktop' && <Sidebar />}
           
           <main className="flex-1 max-w-4xl">
             <div className="mb-6">
@@ -134,16 +135,58 @@ export default function AskQuestion() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Question Details</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Provide details about your question. Include what you've tried and what specific help you need."
-                              rows={12}
-                              {...field}
-                            />
-                          </FormControl>
+                          <div className="border rounded-md">
+                            {/* Toolbar */}
+                            <div className="border-b bg-gray-50 px-3 py-2 flex items-center gap-1 text-sm">
+                              <Button type="button" variant="ghost" size="sm" className="h-8 px-2">
+                                <strong>B</strong>
+                              </Button>
+                              <Button type="button" variant="ghost" size="sm" className="h-8 px-2">
+                                <em>I</em>
+                              </Button>
+                              <Button type="button" variant="ghost" size="sm" className="h-8 px-2">
+                                Link
+                              </Button>
+                              <Button type="button" variant="ghost" size="sm" className="h-8 px-2">
+                                Code
+                              </Button>
+                              <Button type="button" variant="ghost" size="sm" className="h-8 px-2">
+                                List
+                              </Button>
+                              <div className="ml-auto text-xs text-gray-500">
+                                Markdown supported
+                              </div>
+                            </div>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Provide details about your question. Include what you've tried and what specific help you need.
+
+Example:
+```javascript
+// Your code here
+function example() {
+  return 'hello world';
+}
+```
+
+**What I tried:**
+1. First I tried...
+2. Then I attempted...
+
+**Expected result:** 
+What should happen
+
+**Actual result:**
+What actually happens"
+                                rows={12}
+                                className="border-0 rounded-none rounded-b-md resize-none focus:ring-0"
+                                {...field}
+                              />
+                            </FormControl>
+                          </div>
                           <FormMessage />
                           <p className="text-sm text-gray-500">
-                            Include relevant code, error messages, and describe what you've tried.
+                            Use markdown formatting for code blocks, lists, and emphasis. Include relevant code, error messages, and describe what you've tried.
                           </p>
                         </FormItem>
                       )}
@@ -189,7 +232,7 @@ export default function AskQuestion() {
             </Card>
           </main>
 
-          {!isMobile && <RightSidebar />}
+          {screenSize === 'desktop' && <RightSidebar />}
         </div>
       </div>
     </div>
