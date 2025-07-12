@@ -7,6 +7,7 @@ StackIt is a full-stack Q&A platform similar to Stack Overflow, built with moder
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Preferred build tool: Vite+React (Create React App is deprecated).
 
 ## Original Design Reference
 The project follows wireframe designs provided by the user that show:
