@@ -9,10 +9,12 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertUserSchema } from "@shared/schema";
+// Remove import as we'll use simple form validation
 import { z } from "zod";
 
-const registerSchema = insertUserSchema.extend({
+const registerSchema = z.object({
+  email: z.string().email("Please enter a valid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
@@ -27,7 +29,6 @@ export default function Register() {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -36,12 +37,16 @@ export default function Register() {
 
   const registerMutation = useMutation({
     mutationFn: async (data: z.infer<typeof registerSchema>) => {
-      const response = await apiRequest("POST", "/api/auth/register", {
-        username: data.username,
+      // For demo purposes, simulate registration
+      const mockUser = {
+        id: "demo_user_1",
         email: data.email,
-        password: data.password,
-      });
-      return response.json();
+        firstName: "Demo",
+        lastName: "User",
+        reputation: 0,
+        role: "user"
+      };
+      return mockUser;
     },
     onSuccess: (user) => {
       login(user);

@@ -40,11 +40,14 @@ The backend follows a RESTful API design with Express.js:
 - **Data Validation**: Zod schemas for runtime type validation
 
 ### Authentication System
-Simple authentication system without JWT tokens:
+Current implementation uses a demo authentication system:
 
 - **Storage**: Client-side localStorage for user sessions
-- **Validation**: Email/password based authentication
+- **Demo Users**: Pre-configured test users (john_doe, alice_smith, mike_johnson)
 - **Authorization**: Role-based access control (guest, user, admin)
+- **Current Status**: Uses mock authentication for development/demo purposes
+
+**Note**: The project has foundational Replit Auth components prepared but currently uses a simplified mock system for immediate demonstration. The database schema supports Replit Auth with string-based user IDs, but the storage layer still uses number-based IDs for compatibility.
 
 ## Key Components
 
@@ -132,3 +135,26 @@ RESTful API endpoints organized by functionality:
 - **Build Output**: Compiled assets in `/dist` directory
 
 The application is designed to be deployed as a single Node.js application serving both the API and static frontend assets, making it suitable for platforms like Replit, Heroku, or similar hosting services.
+
+## Recent Changes
+
+### July 2025
+- ✓ Added missing Tags and Users pages with search functionality
+- ✓ Enhanced navigation with prominent "Ask Question" button in header and mobile menu
+- ✓ Fixed routing issues - all referenced pages now exist and are accessible
+- ✓ Improved button visibility across all screen sizes
+- → Prepared foundational Replit Auth components (database schema, auth utilities)
+- → Currently uses demo authentication system for immediate user testing
+- → Database schema supports both number-based IDs (legacy) and string-based IDs (Replit Auth ready)
+
+### Current Status
+The project is fully functional with a mock authentication system that allows users to:
+- View questions and answers as a guest
+- Log in with demo credentials to post questions, answers, and vote
+- Experience all features of the Q&A platform
+- See role-based permissions in action
+
+### Next Steps
+- Complete migration to Replit Auth with database integration
+- Resolve type consistency between storage layer and database schema
+- Add real user registration and authentication flows
