@@ -1,3 +1,5 @@
+import Layout from "@/components/layout/Layout";
+import Spline3DModel from "@/components/spline-3d-model";
 import { Link, useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -62,103 +64,110 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-stackit-light flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center">
-            <Link href="/" className="flex items-center justify-center mb-4">
-              <span className="text-2xl font-bold text-stackit-blue">StackIt</span>
-            </Link>
-            Log In to Your Account
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <div className="flex items-center justify-between">
-                <FormField
-                  control={form.control}
-                  name="remember"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel className="text-sm text-gray-600">
-                          Remember me
-                        </FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                
-                <Link href="/forgot-password">
-                  <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
-                    Forgot password?
-                  </Button>
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="flex w-full max-w-5xl gap-8">
+          <div className="hidden md:block md:w-1/2">
+            <Spline3DModel sceneUrl="https://my.spline.design/genkubgreetingrobot-ojbtNGdSp4cmBBkIPbwRuKWR/" />
+          </div>
+          <Card className="w-full md:w-1/2">
+            <CardHeader>
+              <CardTitle className="text-center">
+                <Link href="/" className="flex items-center justify-center mb-4">
+                  <span className="text-2xl font-bold text-stackit-blue">StackIt</span>
                 </Link>
-              </div>
-              
-              <Button
-                type="submit"
-                disabled={loginMutation.isPending}
-                className="w-full bg-stackit-blue text-white hover:bg-stackit-blue-dark"
-              >
-                {loginMutation.isPending ? "Logging in..." : "Log In"}
-              </Button>
-              
-              <div className="text-center">
-                <span className="text-sm text-gray-600">Don't have an account? </span>
-                <Link href="/register">
-                  <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
-                    Sign up
+                Log In to Your Account
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Enter your password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="flex items-center justify-between">
+                    <FormField
+                      control={form.control}
+                      name="remember"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel className="text-sm text-gray-600">
+                              Remember me
+                            </FormLabel>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <Link href="/forgot-password">
+                      <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
+                        Forgot password?
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    disabled={loginMutation.isPending}
+                    className="w-full bg-stackit-blue text-white hover:bg-stackit-blue-dark"
+                  >
+                    {loginMutation.isPending ? "Logging in..." : "Log In"}
                   </Button>
-                </Link>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+                  
+                  <div className="text-center">
+                    <span className="text-sm text-gray-600">Don't have an account? </span>
+                    <Link href="/register">
+                      <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
+                        Sign up
+                      </Button>
+                    </Link>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </Layout>
   );
 }

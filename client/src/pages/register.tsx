@@ -1,3 +1,5 @@
+import Layout from "@/components/layout/Layout";
+import Spline3DModel from "@/components/spline-3d-model";
 import { Link, useLocation } from "wouter";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -9,10 +11,10 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// Remove import as we'll use simple form validation
 import { z } from "zod";
 
 const registerSchema = z.object({
+  username: z.string().min(1, "Username is required"),
   email: z.string().email("Please enter a valid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string(),
@@ -40,11 +42,15 @@ export default function Register() {
       // For demo purposes, simulate registration
       const mockUser = {
         id: "demo_user_1",
+        username: data.username,
         email: data.email,
-        firstName: "Demo",
-        lastName: "User",
+        firstName: null,
+        lastName: null,
+        profileImageUrl: null,
         reputation: 0,
-        role: "user"
+        role: "user" as "user",
+        createdAt: null,
+        updatedAt: null,
       };
       return mockUser;
     },
@@ -70,110 +76,117 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-stackit-light flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-center">
-            <Link href="/" className="flex items-center justify-center mb-4">
-              <span className="text-2xl font-bold text-stackit-blue">StackIt</span>
-            </Link>
-            Create Your Account
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Choose a username"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Create a password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Confirm your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <Button
-                type="submit"
-                disabled={registerMutation.isPending}
-                className="w-full bg-stackit-blue text-white hover:bg-stackit-blue-dark"
-              >
-                {registerMutation.isPending ? "Creating account..." : "Create Account"}
-              </Button>
-              
-              <div className="text-center">
-                <span className="text-sm text-gray-600">Already have an account? </span>
-                <Link href="/login">
-                  <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
-                    Log in
-                  </Button>
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="flex w-full max-w-5xl gap-8">
+          <div className="hidden md:block md:w-1/2">
+            <Spline3DModel sceneUrl="https://my.spline.design/genkubgreetingrobot-ojbtNGdSp4cmBBkIPbwRuKWR/" />
+          </div>
+          <Card className="w-full md:w-1/2">
+            <CardHeader>
+              <CardTitle className="text-center">
+                <Link href="/" className="flex items-center justify-center mb-4">
+                  <span className="text-2xl font-bold text-stackit-blue">StackIt</span>
                 </Link>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+                Create Your Account
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Choose a username"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Enter your email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Create a password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Confirm your password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <Button
+                    type="submit"
+                    disabled={registerMutation.isPending}
+                    className="w-full bg-stackit-blue text-white hover:bg-stackit-blue-dark"
+                  >
+                    {registerMutation.isPending ? "Creating account..." : "Create Account"}
+                  </Button>
+                  
+                  <div className="text-center">
+                    <span className="text-sm text-gray-600">Already have an account? </span>
+                    <Link href="/login">
+                      <Button variant="link" className="text-sm text-stackit-blue hover:underline p-0">
+                        Log in
+                      </Button>
+                    </Link>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </Layout>
   );
 }
