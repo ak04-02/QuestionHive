@@ -56,12 +56,13 @@ export default function Header() {
             
             {/* Popular Tags - Hidden on mobile, shown as small tags on desktop */}
             {!isMobile && (
-              <div className="flex flex-wrap gap-1">
-                {popularTags?.slice(0, 4).map((tag: any) => (
+              <div className="flex flex-wrap gap-1 mt-1">
+                <span className="text-xs text-gray-500 mr-2">Popular:</span>
+                {popularTags?.slice(0, 5).map((tag: any) => (
                   <Badge
                     key={tag.id}
                     variant="secondary"
-                    className="text-xs cursor-pointer hover:bg-blue-100 hover:text-blue-800"
+                    className="text-xs cursor-pointer hover:bg-stackit-blue hover:text-white transition-colors"
                   >
                     {tag.name}
                   </Badge>
@@ -99,59 +100,11 @@ export default function Header() {
                   <DropdownMenuItem>
                     <span className="flex items-center w-full">Unanswered</span>
                   </DropdownMenuItem>
-                  {/* Popular tags in mobile menu */}
-                  <div className="px-2 py-1 border-t">
-                    <p className="text-xs font-semibold text-gray-500 mb-1">Popular Tags</p>
-                    <div className="flex flex-wrap gap-1">
-                      {popularTags?.slice(0, 6).map((tag: any) => (
-                        <Badge
-                          key={tag.id}
-                          variant="secondary"
-                          className="text-xs cursor-pointer hover:bg-blue-100 hover:text-blue-800"
-                        >
-                          {tag.name}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
 
-            {/* Desktop Navigation - Filters when authenticated */}
-            {!isMobile && isAuthenticated && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
-                    <Filter size={16} className="mr-1" />
-                    Filters
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
-                    <Clock size={14} className="mr-2" />
-                    Newest
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <MessageSquareOff size={14} className="mr-2" />
-                    Unanswered
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    More Options
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
 
-            {/* Desktop Navigation Links - when not authenticated */}
-            {!isMobile && !isAuthenticated && (
-              <div className="hidden md:flex items-center space-x-4 text-sm">
-                <Link href="/" className="text-gray-600 hover:text-gray-900">Questions</Link>
-                <Link href="/tags" className="text-gray-600 hover:text-gray-900">Tags</Link>
-                <Link href="/users" className="text-gray-600 hover:text-gray-900">Users</Link>
-                <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Unanswered</span>
-              </div>
-            )}
 
             {/* User Actions */}
             {isAuthenticated ? (
