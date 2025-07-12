@@ -78,8 +78,8 @@ export default function QuestionCard({ question }: QuestionCardProps) {
             </div>
 
             {/* Question Meta */}
-            <div className="flex items-center justify-between text-xs text-gray-500">
-              <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
                 <span className="flex items-center gap-1">
                   <MessageSquare size={14} />
                   {question.answerCount} answer{question.answerCount !== 1 ? 's' : ''}
@@ -96,15 +96,16 @@ export default function QuestionCard({ question }: QuestionCardProps) {
                 )}
               </div>
               
-              <div className="flex items-center gap-2">
-                <span>asked {formatTimeAgo(question.createdAt)}</span>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <span className="hidden sm:inline">asked {formatTimeAgo(question.createdAt)}</span>
+                <span className="sm:hidden">{formatTimeAgo(question.createdAt)}</span>
                 <div className="flex items-center gap-1">
                   <Avatar className="w-6 h-6">
                     <AvatarFallback className="bg-gradient-to-r from-blue-400 to-purple-500 text-white text-xs font-semibold">
                       {getInitials(question.author?.username || "U")}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="font-medium">{question.author?.username}</span>
+                  <span className="font-medium truncate max-w-20 sm:max-w-none">{question.author?.username}</span>
                   <span className="text-stackit-blue font-medium">
                     {question.author?.reputation?.toLocaleString()}
                   </span>
