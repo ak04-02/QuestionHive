@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Bell, SquareStack, Menu, Filter, Clock, MessageSquareOff } from "lucide-react";
+import { Search, Bell, SquareStack, Menu, Filter, Clock, MessageSquareOff, Plus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,6 +86,14 @@ export default function Header() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
+                  {isAuthenticated && (
+                    <DropdownMenuItem>
+                      <Link href="/ask" className="flex items-center w-full text-stackit-blue font-semibold">
+                        <Plus size={16} className="mr-2" />
+                        Ask Question
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem>
                     <Link href="/" className="flex items-center w-full">
                       Questions
@@ -130,6 +138,14 @@ export default function Header() {
             {/* User Actions */}
             {isAuthenticated ? (
               <>
+                {/* Ask Question Button */}
+                <Link href="/ask">
+                  <Button className="bg-stackit-blue text-white hover:bg-stackit-blue-dark flex items-center">
+                    <Plus size={16} className="mr-1" />
+                    {screenSize === 'mobile' ? "Ask" : "Ask Question"}
+                  </Button>
+                </Link>
+                
                 {/* Notification Bell */}
                 <div className="relative">
                   <Button variant="ghost" size="sm" className="text-gray-500 hover:text-gray-700">

@@ -219,6 +219,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Users routes
+  app.get("/api/users", async (req, res) => {
+    try {
+      // For demo purposes, return mock users data
+      // In production, this would fetch from storage.getUsers()
+      const mockUsers = [
+        {
+          id: 1,
+          username: "john_doe",
+          email: "john@example.com",
+          reputation: 1234,
+          role: "user",
+          createdAt: new Date("2024-01-15"),
+          updatedAt: new Date("2024-01-15")
+        },
+        {
+          id: 2,
+          username: "alice_smith",
+          email: "alice@example.com",
+          reputation: 567,
+          role: "admin",
+          createdAt: new Date("2024-02-10"),
+          updatedAt: new Date("2024-02-10")
+        },
+        {
+          id: 3,
+          username: "mike_johnson",
+          email: "mike@example.com",
+          reputation: 2891,
+          role: "user",
+          createdAt: new Date("2024-03-05"),
+          updatedAt: new Date("2024-03-05")
+        }
+      ];
+      res.json(mockUsers);
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
   // Tag routes
   app.get("/api/tags", async (req, res) => {
     try {

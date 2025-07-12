@@ -11,6 +11,8 @@ import Login from "@/pages/login";
 import Register from "@/pages/register";
 import Profile from "@/pages/profile";
 import Admin from "@/pages/admin";
+import Tags from "@/pages/tags";
+import Users from "@/pages/users";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -23,6 +25,8 @@ function Router() {
       <Route path="/register" component={Register} />
       <Route path="/profile/:id" component={Profile} />
       <Route path="/admin" component={Admin} />
+      <Route path="/tags" component={Tags} />
+      <Route path="/users" component={Users} />
       <Route component={NotFound} />
     </Switch>
   );
