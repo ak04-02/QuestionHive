@@ -8,6 +8,15 @@ StackIt is a full-stack Q&A platform similar to Stack Overflow, built with moder
 
 Preferred communication style: Simple, everyday language.
 
+## Original Design Reference
+The project follows wireframe designs provided by the user that show:
+- Mobile-first responsive design with hamburger navigation
+- Desktop layout with sidebar navigation and main content area  
+- Question listing page with vote buttons, metadata, and tags
+- Individual question view with answers and voting
+- Ask Question page with rich text editor and tags input
+- Search functionality with filters and popular tags integration
+
 ## System Architecture
 
 ### Frontend Architecture
