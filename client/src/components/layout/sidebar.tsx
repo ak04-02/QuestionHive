@@ -1,16 +1,10 @@
 import { Link, useLocation } from "wouter";
 import { Home, HelpCircle, Tags, Users, Settings } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/components/auth-context";
-import { useQuery } from "@tanstack/react-query";
 
 export default function Sidebar() {
   const [location] = useLocation();
   const { user } = useAuth();
-
-  const { data: popularTags } = useQuery({
-    queryKey: ["/api/tags/popular"],
-  });
 
   const isActive = (path: string) => location === path;
 
@@ -61,21 +55,7 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* Popular Tags */}
-      <div className="mt-6 bg-white rounded-lg shadow-sm border p-4">
-        <h3 className="text-sm font-semibold text-gray-900 mb-3">Popular Tags</h3>
-        <div className="flex flex-wrap gap-2">
-          {popularTags?.map((tag: any) => (
-            <Badge 
-              key={tag.id} 
-              variant="secondary" 
-              className="cursor-pointer hover:bg-blue-100 hover:text-blue-800"
-            >
-              {tag.name}
-            </Badge>
-          ))}
-        </div>
-      </div>
+
     </aside>
   );
 }

@@ -9,7 +9,7 @@ import Sidebar from "@/components/layout/sidebar";
 import RightSidebar from "@/components/layout/right-sidebar";
 import QuestionCard from "@/components/question-card";
 import { useAuth } from "@/components/auth-context";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useScreenSize } from "@/hooks/use-mobile";
 import type { Question } from "@shared/schema";
 
 export default function Home() {
@@ -17,6 +17,7 @@ export default function Home() {
   const searchQuery = searchParams.get("search");
   const { isAuthenticated } = useAuth();
   const isMobile = useIsMobile();
+  const screenSize = useScreenSize();
   const [activeFilter, setActiveFilter] = useState("newest");
 
   const { data: questions, isLoading } = useQuery({
@@ -52,8 +53,8 @@ export default function Home() {
       <Header />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className={`flex ${isMobile ? 'flex-col' : 'flex-row'} gap-6`}>
-          {!isMobile && <Sidebar />}
+        <div className={`flex ${screenSize === 'mobile' ? 'flex-col' : 'flex-row'} gap-6`}>
+          {screenSize === 'desktop' && <Sidebar />}
           
           {/* Main Content */}
           <main className="flex-1">

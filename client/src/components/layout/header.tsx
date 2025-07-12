@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/auth-context";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useIsTablet, useScreenSize } from "@/hooks/use-mobile";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Header() {
@@ -14,6 +14,8 @@ export default function Header() {
   const [, setLocation] = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
   const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
+  const screenSize = useScreenSize();
 
   const { data: popularTags } = useQuery({
     queryKey: ["/api/tags/popular"],
@@ -42,7 +44,7 @@ export default function Header() {
           </Link>
 
           {/* Search Bar and Popular Tags */}
-          <div className={`flex-1 max-w-2xl ${isMobile ? "mx-4" : "mx-8"}`}>
+          <div className={`flex-1 max-w-2xl ${screenSize === 'mobile' ? "mx-4" : "mx-8"}`}>
             <form onSubmit={handleSearch} className="relative mb-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <Input
@@ -54,11 +56,11 @@ export default function Header() {
               />
             </form>
             
-            {/* Popular Tags - Hidden on mobile, shown as small tags on desktop */}
-            {!isMobile && (
+            {/* Popular Tags - Hidden on mobile, shown differently on tablet vs desktop */}
+            {screenSize !== 'mobile' && (
               <div className="flex flex-wrap gap-1 mt-1">
                 <span className="text-xs text-gray-500 mr-2">Popular:</span>
-                {popularTags?.slice(0, 5).map((tag: any) => (
+                {popularTags?.slice(0, screenSize === 'tablet' ? 3 : 5).map((tag: any) => (
                   <Badge
                     key={tag.id}
                     variant="secondary"
@@ -73,8 +75,8 @@ export default function Header() {
 
           {/* Navigation and User Actions */}
           <div className="flex items-center space-x-2">
-            {/* Mobile Navigation Menu */}
-            {isMobile && (
+            {/* Mobile and Tablet Navigation Menu */}
+            {(screenSize === 'mobile' || screenSize === 'tablet') && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm">
@@ -100,6 +102,23 @@ export default function Header() {
                   <DropdownMenuItem>
                     <span className="flex items-center w-full">Unanswered</span>
                   </DropdownMenuItem>
+                  {/* Show more popular tags in tablet dropdown */}
+                  {screenSize === 'tablet' && popularTags && popularTags.length > 3 && (
+                    <div className="px-2 py-1 border-t">
+                      <p className="text-xs font-semibold text-gray-500 mb-1">More Tags</p>
+                      <div className="flex flex-wrap gap-1">
+                        {popularTags?.slice(3, 7).map((tag: any) => (
+                          <Badge
+                            key={tag.id}
+                            variant="secondary"
+                            className="text-xs cursor-pointer hover:bg-stackit-blue hover:text-white"
+                          >
+                            {tag.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
