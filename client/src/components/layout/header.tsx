@@ -43,34 +43,36 @@ export default function Header() {
             <span className="text-xl font-bold text-gray-900">StackIt</span>
           </Link>
 
-          {/* Search Bar and Popular Tags */}
+          {/* Search Bar */}
           <div className={`flex-1 max-w-2xl ${screenSize === 'mobile' ? "mx-4" : "mx-8"}`}>
-            <form onSubmit={handleSearch} className="relative mb-2">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-              <Input
-                type="text"
-                placeholder="Search questions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 focus:ring-stackit-blue focus:border-transparent"
-              />
-            </form>
-            
-            {/* Popular Tags - Hidden on mobile, shown differently on tablet vs desktop */}
-            {screenSize !== 'mobile' && (
-              <div className="flex flex-wrap gap-1 mt-1">
-                <span className="text-xs text-gray-500 mr-2">Popular:</span>
-                {popularTags?.slice(0, screenSize === 'tablet' ? 3 : 5).map((tag: any) => (
-                  <Badge
-                    key={tag.id}
-                    variant="secondary"
-                    className="text-xs cursor-pointer hover:bg-stackit-blue hover:text-white transition-colors"
-                  >
-                    {tag.name}
-                  </Badge>
-                ))}
-              </div>
-            )}
+            <div className="flex items-center gap-3">
+              <form onSubmit={handleSearch} className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                <Input
+                  type="text"
+                  placeholder="Search questions..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 focus:ring-stackit-blue focus:border-transparent"
+                />
+              </form>
+              
+              {/* Popular Tags - Inline with search, hidden on mobile */}
+              {screenSize !== 'mobile' && (
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  <span className="text-xs text-gray-500 whitespace-nowrap">Popular:</span>
+                  {popularTags?.slice(0, screenSize === 'tablet' ? 2 : 3).map((tag: any) => (
+                    <Badge
+                      key={tag.id}
+                      variant="secondary"
+                      className="text-xs cursor-pointer hover:bg-stackit-blue hover:text-white transition-colors"
+                    >
+                      {tag.name}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Navigation and User Actions */}
