@@ -164,6 +164,7 @@ export class MemStorage implements IStorage {
       const question: Question = {
         ...questionData,
         id: this.currentId.questions++,
+        accepted: questionData.accepted || false,
         createdAt: new Date(Date.now() - Math.random() * 86400000 * 3),
         updatedAt: new Date(),
       };
@@ -235,6 +236,7 @@ export class MemStorage implements IStorage {
       votes: 0,
       views: 0,
       answerCount: 0,
+      tags: questionData.tags || [],
       accepted: false,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -342,7 +344,7 @@ export class MemStorage implements IStorage {
     const tag: Tag = {
       id,
       name,
-      description,
+      description: description || null,
       useCount: 0,
       createdAt: new Date(),
     };

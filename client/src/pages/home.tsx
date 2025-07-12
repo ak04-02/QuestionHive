@@ -37,6 +37,8 @@ export default function Home() {
   // Mock user data for questions
   const questionsWithAuthors = questions?.map((question: Question) => ({
     ...question,
+    createdAt: new Date(question.createdAt),
+    updatedAt: new Date(question.updatedAt),
     author: {
       username: question.authorId === 1 ? "john_doe" : 
                 question.authorId === 2 ? "alice_smith" : "mike_johnson",

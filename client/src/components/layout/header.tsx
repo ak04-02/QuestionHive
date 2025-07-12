@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { Search, Bell, SquareStack } from "lucide-react";
+import { Search, Bell, SquareStack, Menu, Filter, Clock, MessageSquareOff } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/components/auth-context";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [, setLocation] = useLocation();
   const { user, logout, isAuthenticated } = useAuth();
   const isMobile = useIsMobile();
+
+  const { data: popularTags } = useQuery({
+    queryKey: ["/api/tags/popular"],
+  });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,9 +41,9 @@ export default function Header() {
             <span className="text-xl font-bold text-gray-900">StackIt</span>
           </Link>
 
-          {/* Search Bar */}
-          <div className={`flex-1 max-w-lg ${isMobile ? "mx-4" : "mx-8"}`}>
-            <form onSubmit={handleSearch} className="relative">
+          {/* Search Bar and Popular Tags */}
+          <div className={`flex-1 max-w-2xl ${isMobile ? "mx-4" : "mx-8"}`}>
+            <form onSubmit={handleSearch} className="relative mb-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
               <Input
                 type="text"
@@ -47,10 +53,107 @@ export default function Header() {
                 className="w-full pl-10 pr-4 focus:ring-stackit-blue focus:border-transparent"
               />
             </form>
+            
+            {/* Popular Tags - Hidden on mobile, shown as small tags on desktop */}
+            {!isMobile && (
+              <div className="flex flex-wrap gap-1">
+                {popularTags?.slice(0, 4).map((tag: any) => (
+                  <Badge
+                    key={tag.id}
+                    variant="secondary"
+                    className="text-xs cursor-pointer hover:bg-blue-100 hover:text-blue-800"
+                  >
+                    {tag.name}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* User Actions */}
-          <div className="flex items-center space-x-4">
+          {/* Navigation and User Actions */}
+          <div className="flex items-center space-x-2">
+            {/* Mobile Navigation Menu */}
+            {isMobile && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm">
+                    <Menu size={20} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem>
+                    <Link href="/" className="flex items-center w-full">
+                      Questions
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/tags" className="flex items-center w-full">
+                      Tags
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/users" className="flex items-center w-full">
+                      Users
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span className="flex items-center w-full">Unanswered</span>
+                  </DropdownMenuItem>
+                  {/* Popular tags in mobile menu */}
+                  <div className="px-2 py-1 border-t">
+                    <p className="text-xs font-semibold text-gray-500 mb-1">Popular Tags</p>
+                    <div className="flex flex-wrap gap-1">
+                      {popularTags?.slice(0, 6).map((tag: any) => (
+                        <Badge
+                          key={tag.id}
+                          variant="secondary"
+                          className="text-xs cursor-pointer hover:bg-blue-100 hover:text-blue-800"
+                        >
+                          {tag.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {/* Desktop Navigation - Filters when authenticated */}
+            {!isMobile && isAuthenticated && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
+                    <Filter size={16} className="mr-1" />
+                    Filters
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>
+                    <Clock size={14} className="mr-2" />
+                    Newest
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <MessageSquareOff size={14} className="mr-2" />
+                    Unanswered
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    More Options
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
+            {/* Desktop Navigation Links - when not authenticated */}
+            {!isMobile && !isAuthenticated && (
+              <div className="hidden md:flex items-center space-x-4 text-sm">
+                <Link href="/" className="text-gray-600 hover:text-gray-900">Questions</Link>
+                <Link href="/tags" className="text-gray-600 hover:text-gray-900">Tags</Link>
+                <Link href="/users" className="text-gray-600 hover:text-gray-900">Users</Link>
+                <span className="text-gray-600 hover:text-gray-900 cursor-pointer">Unanswered</span>
+              </div>
+            )}
+
+            {/* User Actions */}
             {isAuthenticated ? (
               <>
                 {/* Notification Bell */}
@@ -67,7 +170,7 @@ export default function Header() {
                 <div className="flex items-center space-x-2">
                   <Link href={`/profile/${user?.id}`}>
                     <Button variant="ghost" size="sm" className="text-stackit-blue hover:text-stackit-blue-dark">
-                      {user?.username}
+                      {isMobile ? user?.username?.slice(0, 8) + "..." : user?.username}
                     </Button>
                   </Link>
                   <Button 
@@ -76,7 +179,7 @@ export default function Header() {
                     onClick={handleLogout}
                     className="text-gray-500 hover:text-gray-700"
                   >
-                    Logout
+                    {isMobile ? "Exit" : "Logout"}
                   </Button>
                 </div>
               </>
